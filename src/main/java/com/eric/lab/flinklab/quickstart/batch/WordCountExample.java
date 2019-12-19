@@ -11,6 +11,9 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.util.Collector;
 
+/**
+ *
+ */
 public class WordCountExample {
     public static void main(String[] args) throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
@@ -23,7 +26,7 @@ public class WordCountExample {
 
         DataSet<Tuple2<String, Integer>> wordCounts = text
                 .flatMap(new LineSplitter())
-                .groupBy(0)
+                .groupBy(0) // 使用tuple的第一个元素作为key
 // 可以通过reduce函数或是内嵌的sum函数实现统计
 //                .reduce(new ReduceFunction<Tuple2<String, Integer>>() {
 //                    @Override
@@ -31,7 +34,7 @@ public class WordCountExample {
 //                        return new Tuple2<>(stringIntegerTuple2.f0,stringIntegerTuple2.f1+t1.f1);
 //                    }
 //                });
-                .sum(1);
+                .sum(1); // 相同的key的tuple,使用第二个元素作为value
         wordCounts.mapPartition(new MapPartitionFunction<Tuple2<String,Integer>, Object>() {
             @Override
             public void mapPartition(Iterable<Tuple2<String, Integer>> iterable, Collector<Object> collector) throws Exception {
@@ -54,7 +57,7 @@ public class WordCountExample {
         env.execute("batch wordcount");
 
     }
-
+// 字符串分割实现
     public static class LineSplitter implements FlatMapFunction<String, Tuple2<String, Integer>> {
         @Override
         public void flatMap(String line, Collector<Tuple2<String, Integer>> out) {
