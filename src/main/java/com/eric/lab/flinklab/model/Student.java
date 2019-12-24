@@ -1,4 +1,4 @@
-package com.eric.lab.flinklab.quickstart.model;
+package com.eric.lab.flinklab.model;
 
 public class Student {
     private String name;

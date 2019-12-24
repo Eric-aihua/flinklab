@@ -1,4 +1,4 @@
-package com.eric.lab.flinklab.quickstart.model;
+package com.eric.lab.flinklab.model;
 
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.java.DataSet;
