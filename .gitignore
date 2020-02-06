@@ -7,6 +7,7 @@
 /.idea
 *.iml
 /target
+/output
 /word_count
 # BlueJ files
 *.ctxt
