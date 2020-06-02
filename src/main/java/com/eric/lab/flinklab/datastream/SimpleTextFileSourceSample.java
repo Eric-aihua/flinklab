@@ -1,6 +1,5 @@
 package com.eric.lab.flinklab.datastream;
 
-import org.apache.flink.api.java.io.CsvInputFormat;
 import org.apache.flink.api.java.io.TextInputFormat;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.core.fs.Path;
