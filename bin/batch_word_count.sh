@@ -1,4 +1,4 @@
 #!/bin/bash
 
 
-flink run -c com.eric.lab.flinklab.quickstart.batch.WordCountExample flinklab-1.0-SNAPSHOT.jar
+flink run -c com.eric.lab.flinklab.state.MaxValueKeyedStateExample ../target/flinklab-1.0-SNAPSHOT.jar
