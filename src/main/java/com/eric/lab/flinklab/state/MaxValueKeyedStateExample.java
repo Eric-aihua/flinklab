@@ -33,7 +33,7 @@ public class MaxValueKeyedStateExample {
                     @Override
                     public Tuple2<String, Integer> map(String value) throws Exception {
 //                        return Tuple2.of(value,1);
-                        int intValue = new Random().nextInt(100);
+                        int intValue = new Random().nextInt(10000);
                         return Tuple2.of(value,intValue);
                     }
                 }
@@ -50,7 +50,10 @@ class MaxValueFunc extends RichFlatMapFunction<Tuple2<String, Integer>, Tuple3<S
 
     @Override
     public void flatMap(Tuple2<String, Integer> value, Collector<Tuple3<String, Integer,Integer>> out) throws Exception {
-        int currentLeast=max.value();
+        int currentLeast=0;
+        if (max.value()!=null){
+            currentLeast=max.value();
+        }
         if(value.f1>currentLeast){
             max.update(value.f1);
             out.collect(Tuple3.of(value.f0,value.f1,value.f1));
@@ -69,7 +72,7 @@ class MaxValueFunc extends RichFlatMapFunction<Tuple2<String, Integer>, Tuple3<S
                 .setStateVisibility(StateTtlConfig.StateVisibility.NeverReturnExpired).build();
         ValueStateDescriptor<Integer> descriptor=new ValueStateDescriptor<Integer>
                 ("least", TypeInformation.of(new TypeHint<Integer>() {}),0);
-        descriptor.enableTimeToLive(ttlConfig);
+//        descriptor.enableTimeToLive(ttlConfig);
         max=getRuntimeContext().getState(descriptor);
 
     }
