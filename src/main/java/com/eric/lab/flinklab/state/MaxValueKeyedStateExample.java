@@ -11,6 +11,7 @@ import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.contrib.streaming.state.RocksDBStateBackend;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
@@ -18,6 +19,10 @@ import org.apache.flink.util.Collector;
 import java.util.Random;
 
 /**
+ * 1.  状态管理
+ * 2. Rocksdb作为状态管理器
+ * 3. 设置Queryable ,使状态可查询,需要执行两个操作：（1）将flink 安装目录中，opt目录下的flink-queryable-state-runtime_2.12-1.10.1.jar
+ * 拷贝到 lib目录下 （2）在应用程序代码中，调用StateDescriptor的setQueryble方法  (3)set the property queryable-state.enable to tru （4）使用客户端进行调用
  * @author Eric
  * @version 1.0
  * @date 2020/7/14 10:57 下午
@@ -26,6 +31,7 @@ public class MaxValueKeyedStateExample {
     public static void main(String[] args) throws Exception {
         // 1. 定义Env
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setStateBackend(new RocksDBStateBackend("file:///Users/eric/Sourcecode/github/flinklab/checkpoints"));
         env.setParallelism(1);
         DataStream<String> ds = env.socketTextStream("localhost", 7777, "\n");
         ds.map(
@@ -73,6 +79,7 @@ class MaxValueFunc extends RichFlatMapFunction<Tuple2<String, Integer>, Tuple3<S
         ValueStateDescriptor<Integer> descriptor=new ValueStateDescriptor<Integer>
                 ("least", TypeInformation.of(new TypeHint<Integer>() {}),0);
 //        descriptor.enableTimeToLive(ttlConfig);
+        descriptor.setQueryable("latestQueryableId");
         max=getRuntimeContext().getState(descriptor);
 
     }
