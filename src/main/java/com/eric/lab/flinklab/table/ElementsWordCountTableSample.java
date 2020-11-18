@@ -17,6 +17,7 @@ public class ElementsWordCountTableSample {
     //     PROGRAM
     // *************************************************************************
 
+
     public static void main(String[] args) throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         BatchTableEnvironment tEnv = BatchTableEnvironment.create(env);
