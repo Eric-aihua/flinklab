@@ -7,6 +7,7 @@ import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
 import org.apache.flink.util.Collector;
 
@@ -50,7 +51,7 @@ public class SocketWordCountForKafkaRunner {
             public String map(WordWithCount wordWithCount) throws Exception {
                 return wordWithCount.toString();
             }
-        }).addSink(new FlinkKafkaProducer011("localhost:9092", "word_count_result", new SimpleStringSchema()));
+        }).addSink(new FlinkKafkaProducer("localhost:9092", "word_count_result", new SimpleStringSchema()));
         env.execute("Socket Window WordCount to Kafka");
     }
 

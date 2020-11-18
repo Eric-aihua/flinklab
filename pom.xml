@@ -27,6 +27,12 @@
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
+            <artifactId>flink-json</artifactId>
+            <version>${flink.version}</version>
+            <!--<scope>provided</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
             <artifactId>flink-core</artifactId>
             <version>${flink.version}</version>
             <!--<scope>provided</scope>-->
@@ -137,7 +143,7 @@
 
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-kafka-0.11_2.11</artifactId>
+            <artifactId>flink-connector-kafka_2.11</artifactId>
             <version>${flink.version}</version>
         </dependency>
     </dependencies>

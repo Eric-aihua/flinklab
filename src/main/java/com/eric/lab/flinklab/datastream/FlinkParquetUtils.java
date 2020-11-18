@@ -16,7 +16,7 @@ import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.util.Collector;
 
 import javax.annotation.Nullable;
@@ -54,7 +54,7 @@ public class FlinkParquetUtils {
             String pathFormat = props.getProperty("hdfs.path.date.format");
             String zone = props.getProperty("hdfs.path.date.zone");
             Long windowTime = Long.valueOf(props.getProperty("window.time.second"));
-            FlinkKafkaConsumer010<String> flinkKafkaConsumer010 = new FlinkKafkaConsumer010<>(topic, new SimpleStringSchema(), props);
+            FlinkKafkaConsumer<String> flinkKafkaConsumer010 = new FlinkKafkaConsumer<>(topic, new SimpleStringSchema(), props);
             KeyedStream<TopicSource, String> KeyedStream = env.addSource(flinkKafkaConsumer010).map(FlinkParquetUtils::transformData).assignTimestampsAndWatermarks(new CustomWatermarks<TopicSource>()).keyBy(TopicSource::getId);
 
             DataStream<TopicSource> output = KeyedStream.window(TumblingEventTimeWindows.of(Time.seconds(windowTime))).apply(new WindowFunction<TopicSource, TopicSource, String, TimeWindow>() {
